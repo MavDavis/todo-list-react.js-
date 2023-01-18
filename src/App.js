@@ -4,6 +4,7 @@ import { Filters } from './components/Filters';
 import { List } from './components/List';
 function App() {
   const [todos, setTodos] = useState([]);
+  const [filterByCompletion, setFilterByCompletion] = useState('');
 
   useEffect(() => {
     const oldTodos = JSON.parse(localStorage.getItem('todos'));
@@ -61,20 +62,30 @@ function App() {
                   </div>
                 </div>
                 <hr class='my-4' />
-                <Filters />
+                <Filters
+                  filterFunction={filterByCompletion}
+                  filter={(value) => {
+                    setFilterByCompletion(value);
+                    setTodos((oldValue) =>
+                      oldValue.filter((item) => item.done !== true)
+                    );
+                  }}
+                />
                 {todos?.map((todo) => (
                   <List
                     name={todo.name}
                     date={todo.date}
                     done={todo.done}
                     key={todo.id}
-                    handleDone ={()=>{
-                      setTodos((oldValue)=>oldValue.map(item=>{
-                        if(item.id === todo.id){
-                          return {...item, done:!item.done}
-                        }
-                        return item;
-                      }))
+                    handleDone={() => {
+                      setTodos((oldValue) =>
+                        oldValue.map((item) => {
+                          if (item.id === todo.id) {
+                            return { ...item, done: !item.done };
+                          }
+                          return item;
+                        })
+                      );
                     }}
                     handleDelete={() => {
                       setTodos((oldValue) => {
