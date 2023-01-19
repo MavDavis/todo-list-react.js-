@@ -6,11 +6,18 @@ import generatedPassword from './components/passwordGen';
 function App() {
   const [todos, setTodos] = useState([]);
   const [filterByCompletion, setFilterByCompletion] = useState('');
-  const [sortByValue, sortByValueFunction] = useState('date');
+  const [sortByValue, sortByValueFunction] = useState('');
   useEffect(() => {
     const oldTodos = JSON.parse(localStorage.getItem('todos'));
+    
     if (oldTodos) {
       setTodos(oldTodos);
+         setTodos((oldValue) =>
+     oldValue.map((item) => {
+      return { ...item, show: true };
+     
+     })
+   ); 
     } else {
       setTodos([]);
     }
@@ -28,6 +35,7 @@ function App() {
           day: 'numeric',
           year: 'numeric',
         }),
+        show: true,
         done: false,
       };
       setTodos((oldValue) => {
@@ -37,30 +45,49 @@ function App() {
   }
   function filterList(value) {
     setFilterByCompletion(value);
-    //     setTodos((oldValue) => {
-
-    //       oldValue.filter((item) => item.done !== true);
-
-    // }
-    //         })
     if (value === 'Completed') {
-      console.log(todos.filter((item) => item.done === true));
-    } else if (value === 'All') {
-      console.log(todos);
-    } else if (value === 'Active') {
-      console.log(todos.filter((item) => item.done !== true));
-    } else if (value === 'Has due date') {
-      console.log(
-        todos.filter(
-          (item) =>
-            item.date ===
-            new Date().toLocaleDateString('en-us', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-            })
-        )
+      setTodos((oldValue) =>
+        oldValue.map((item) => {
+          if (item.done === true) {
+            return { ...item, show: true };
+          } else {
+            return { ...item, show: false };
+          }
+        })
       );
+    } else if (value === 'All') {
+   setTodos((oldValue) =>
+     oldValue.map((item) => {
+      return { ...item, show: true };
+     
+     })
+   );    } else if (value === 'Active') {
+      setTodos((oldValue) =>
+        oldValue.map((item) => {
+          if (item.done !== true) {
+            return { ...item, show: true };
+          } else {
+            return { ...item, show: false };
+          }
+        })
+      );
+    } else if (value === 'Has due date') {
+       setTodos((oldValue) =>
+         oldValue.map((item) => {
+           if (
+             item.date ===
+             new Date().toLocaleDateString('en-us', {
+               month: 'short',
+               day: 'numeric',
+               year: 'numeric',
+             })
+           ) {
+             return { ...item, show: true };
+           } else {
+             return { ...item, show: false };
+           }
+         })
+       );
     }
   }
   function DoneList(todo) {
@@ -82,7 +109,7 @@ function App() {
   function sort(value) {
     sortByValueFunction(value);
     if (value === 'alphabetically') {
-      setTodos((todo)=>
+      setTodos((todo) =>
         todo.sort(function (a, b) {
           let x = a.name.toLowerCase();
           let y = b.name.toLowerCase();
@@ -140,6 +167,7 @@ function App() {
                 {todos?.map((todo) => (
                   <List
                     name={todo.name}
+                    show={todo.show}
                     date={todo.date}
                     done={todo.done}
                     key={todo.id}

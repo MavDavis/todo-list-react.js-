@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const List = ({ name, date, done, handleDelete, handleDone }) => {
-  return (
+export const List = ({ name, date, done, handleDelete, handleDone, show}) => {
+  return ( show &&
     <div>
       <ul className={'list-group list-group-horizontal rounded-0 mb-2'}>
         <li
