@@ -6,7 +6,7 @@ import generatedPassword from './components/passwordGen';
 function App() {
   const [todos, setTodos] = useState([]);
   const [filterByCompletion, setFilterByCompletion] = useState('');
-const [sortByValue, sortByValueFunction] = useState('date')
+  const [sortByValue, sortByValueFunction] = useState('date');
   useEffect(() => {
     const oldTodos = JSON.parse(localStorage.getItem('todos'));
     if (oldTodos) {
@@ -45,12 +45,11 @@ const [sortByValue, sortByValueFunction] = useState('date')
     //         })
     if (value === 'Completed') {
       console.log(todos.filter((item) => item.done === true));
-    }else if( value === 'All'){
+    } else if (value === 'All') {
       console.log(todos);
-    }
-    else if (value === 'Active'){
+    } else if (value === 'Active') {
       console.log(todos.filter((item) => item.done !== true));
-    }    else if (value === 'Has due date'){
+    } else if (value === 'Has due date') {
       console.log(
         todos.filter(
           (item) =>
@@ -62,8 +61,8 @@ const [sortByValue, sortByValueFunction] = useState('date')
             })
         )
       );
-
-  }}
+    }
+  }
   function DoneList(todo) {
     setTodos((oldValue) =>
       oldValue.map((item) => {
@@ -80,14 +79,30 @@ const [sortByValue, sortByValueFunction] = useState('date')
       return newValue;
     });
   }
-  function sort(value){
-    sortByValueFunction(value)
-if(value === 'alphabetically'){
-
-}else if(value === 'date'){
-  
-} 
- }
+  function sort(value) {
+    sortByValueFunction(value);
+    if (value === 'alphabetically') {
+      setTodos((todo)=>
+        todo.sort(function (a, b) {
+          let x = a.name.toLowerCase();
+          let y = b.name.toLowerCase();
+          if (x < y) {
+            return -1;
+          }
+          if (x > y) {
+            return 1;
+          }
+          return 0;
+        })
+      );
+    } else if (value === 'date') {
+      console.log(
+        todos.sort(function (a, b) {
+          return a.date - b.date;
+        })
+      );
+    }
+  }
   return (
     <section className={'vh-100'}>
       <div className={'container py-5 h-100'}>
@@ -119,8 +134,8 @@ if(value === 'alphabetically'){
                 <Filters
                   filterFunction={filterByCompletion}
                   filter={(value) => filterList(value)}
-                  sorter = {sortByValue}
-                  sorterFunction = {(value)=>sort(value)}
+                  sorter={sortByValue}
+                  sorterFunction={(value) => sort(value)}
                 />
                 {todos?.map((todo) => (
                   <List
