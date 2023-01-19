@@ -1,23 +1,23 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 
 export const Adding = ({ handleClick }) => {
   let [value, setValue] = useState('');
   return (
     <div>
-      <div class='d-flex flex-row align-items-center'>
+      <div className={'d-flex flex-row align-items-center'}>
         <input
           type='text'
           value={value}
-          onKeyPress={(event)=>{
+          onKeyPress={(event) => {
             if (event.key === 'Enter') {
               handleClick(value);
               setValue('');
             }
           }}
           onChange={(e) => {
-            setValue(e.target.value)
+            setValue(e.target.value);
           }}
-          class='form-control form-control-lg'
+          className={'form-control form-control-lg'}
           id='exampleFormControlInput1'
           placeholder='Add new...'
         />
@@ -26,10 +26,10 @@ export const Adding = ({ handleClick }) => {
         <div>
           <button
             type='button'
-            class='btn btn-primary'
+            className={'btn btn-primary'}
             onClick={() => {
               handleClick(value);
-              setValue('')
+              setValue('');
             }}
           >
             Add
